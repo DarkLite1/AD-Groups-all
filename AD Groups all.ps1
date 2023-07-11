@@ -30,7 +30,10 @@ Param (
     [Parameter(Mandatory)]
     [String]$ScriptName = 'AD Groups all (BNL)',    
     [String]$LogFolder = "$env:POWERSHELL_LOG_FOLDER\AD Reports\AD Groups all\$ScriptName",
-    [String[]]$ScriptAdmin = $env:POWERSHELL_SCRIPT_ADMIN
+    [String[]]$ScriptAdmin = @(
+        $env:POWERSHELL_SCRIPT_ADMIN,
+        $env:POWERSHELL_SCRIPT_ADMIN_BACKUP
+    )
 )
 
 Begin {
