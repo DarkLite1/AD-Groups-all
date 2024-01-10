@@ -7,10 +7,10 @@
         Retrieve all AD groups within a specific OU.
 
     .DESCRIPTION
-        Report all the groups within a specific OU in AD.. The import file is
-        read for getting the correct parameters. Then the groups are collected
-        and a mail is send to the end user with an Excel sheet in attachment
-        containing the groups.
+        Report all the groups within a specific OU in AD. The group name, OU,
+        how many members, ... but not the members itself.
+
+        This report is then sent by mail in the form of an Excel sheet.
 
     .PARAMETER ImportFile
         A .json file containing the script arguments.
