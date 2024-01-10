@@ -32,7 +32,7 @@ Param (
 )
 
 Begin {
-    Try {
+    try {
         Get-ScriptRuntimeHC -Start
         Import-EventLogParamsHC -Source $ScriptName
         Write-EventLog @EventStartParams
@@ -47,7 +47,7 @@ Begin {
             }
             $logFile = New-LogFileNameHC @LogParams
         }
-        Catch {
+        catch {
             throw "Failed creating the log folder '$LogFolder': $_"
         }
         #endregion
@@ -64,7 +64,7 @@ Begin {
         }
         #endregion
     }
-    Catch {
+    catch {
         Write-Warning $_
         Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority 'High' -Message $_ -Header $ScriptName
         Write-EventLog @EventErrorParams -Message "FAILURE:`n`n- $_"
@@ -130,13 +130,13 @@ Process {
         Get-ScriptRuntimeHC -Stop
         Send-MailHC @mailParams
     }
-    Catch {
+    catch {
         Write-Warning $_
         Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority 'High' -Message $_ -Header $ScriptName
         Write-EventLog @EventErrorParams -Message "FAILURE:`n`n- $_"
         Write-EventLog @EventEndParams; Exit 1
     }
-    Finally {
+    finally {
         Write-EventLog @EventEndParams
     }
 }
