@@ -4,13 +4,14 @@
 
 <#
     .SYNOPSIS
-        Retrieve all AD groups within a specific OU.
+        Create a list of AD groups within a specific OU.
 
     .DESCRIPTION
-        Report all the groups within a specific OU in AD. The group name, OU,
-        how many members, ... but not the members itself.
+        Create an Excel sheet of all active directory groups found within a
+        specific organizational unit. This list contains the group name,
+        OU, member count, ... but not the members itself.
 
-        This report is then sent by mail in the form of an Excel sheet.
+        The report is sent by mail for further review.
 
     .PARAMETER ImportFile
         A .json file containing the script arguments.
