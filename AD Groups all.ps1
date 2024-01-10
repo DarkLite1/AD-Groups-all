@@ -14,10 +14,10 @@
         containing the groups.
 
     .PARAMETER ImportFile
-        Contains all the OU's where we need to search
+        A .json file containing the script arguments.
 
     .PARAMETER LogFolder
-        Location for the log files
+        Location for the log files.
 #>
 
 Param (
