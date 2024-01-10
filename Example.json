@@ -1,0 +1,10 @@
+{
+  "MailTo": ["bob@contoso.com"],
+  "AD": {
+    "OU": [
+      "OU=BEL,OU=EU,DC=contoso,DC=com",
+      "OU=LUX,OU=EU,DC=contoso,DC=com",
+      "OU=NLD,OU=EU,DC=contoso,DC=com"
+    ]
+  }
+}

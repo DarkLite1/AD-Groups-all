@@ -38,18 +38,6 @@ Begin {
         Import-EventLogParamsHC -Source $ScriptName
         Write-EventLog @EventStartParams
 
-        $File = Get-Content $ImportFile -EA Stop | Remove-CommentsHC
-
-        if (-not (
-                $MailTo = $File | Get-ValueFromArrayHC MailTo -Delimiter ',')
-        ) {
-            throw "No 'MailTo' found in the input file."
-        }
-
-        if (-not ($OUs = $File | Get-ValueFromArrayHC -Exclude MailTo)) {
-            throw "No organizational units found in the input file."
-        }
-
         #region Logging
         try {
             $logParams = @{
@@ -64,10 +52,22 @@ Begin {
             throw "Failed creating the log folder '$LogFolder': $_"
         }
         #endregion
+
+        #region Import input file
+        $File = Get-Content $ImportFile -Raw -EA Stop | ConvertFrom-Json
+
+        if (-not ($MailTo = $File.MailTo)) {
+            throw "Input file '$ImportFile': No 'MailTo' addresses found."
+        }
+
+        if (-not ($OUs = $File.AD.OU)) {
+            throw "Input file '$ImportFile': No 'AD.OU' found."
+        }
+        #endregion
     }
     Catch {
         Write-Warning $_
-        Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority High -Message $_ -Header $ScriptName
+        Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority 'High' -Message $_ -Header $ScriptName
         Write-EventLog @EventErrorParams -Message "FAILURE:`n`n- $_"
         Write-EventLog @EventEndParams; Exit 1
     }
@@ -93,7 +93,7 @@ Process {
             },
             @{
                 Name       = 'Members'
-                Expression = { @($_.Members).Count }
+                Expression = { $_.Members.Count }
             }
         }
 
@@ -115,7 +115,7 @@ Process {
         $mailParams = @{
             To        = $MailTo
             Bcc       = $ScriptAdmin
-            Subject   = "$(@($adGroups).count) groups"
+            Subject   = "$($adGroups.Count) groups"
             LogFolder = $logParams.LogFolder
             Header    = $ScriptName
             Save      = $LogFile + ' - Mail.html'
@@ -133,7 +133,7 @@ Process {
     }
     Catch {
         Write-Warning $_
-        Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority High -Message $_ -Header $ScriptName
+        Send-MailHC -To $ScriptAdmin -Subject 'FAILURE' -Priority 'High' -Message $_ -Header $ScriptName
         Write-EventLog @EventErrorParams -Message "FAILURE:`n`n- $_"
         Write-EventLog @EventEndParams; Exit 1
     }
